@@ -50,6 +50,30 @@ docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /va
 ```
 go to http://<your internal ip>:9000
 
+## 5. Make samba share
+```shell
+sudo apt update
+sudo apt install samba
+cd ~/  
+mkdir /mnt/
+sudo nano /etc/samba/smb.conf
+```
+At the bottom of the file, add the following lines:
+```shell
+[sambashare]
+    comment = Samba on Ubuntu
+    path = /mnt
+    read only = no
+    browsable = yes
+```
+
+```shell
+sudo service smbd restart
+sudo ufw allow samba
+
+sudo smbpasswd -a xxxYOURUSERNAMExxx
+```
+
 ## 5. Mount external drive
 Find your drive 
 ```shell
@@ -100,8 +124,8 @@ services:
           - TZ=Europe/Amsterdam
           - AUTO_UPDATE=true
         volumes:
-          - /appdata/jackett:/config
-          - /downloads/watch:/downloads
+          - /mnt/appdata/jackett:/config
+          - /mnt/downloads/watch:/downloads
         network_mode: container:gluetun
         restart: unless-stopped
     radarr:
@@ -113,9 +137,9 @@ services:
           - TZ=Europe/Amsterdam
           - UMASK_SET=022
         volumes:
-          - /appdata/radarr:/config
-          - /media/movies:/movies
-          - /downloads/completed:/downloads
+          - /mnt/appdata/radarr:/config
+          - /mnt/media/movies:/movies
+          - /mnt/downloads/completed:/downloads
         network_mode: container:gluetun
         restart: unless-stopped
     sonarr:
@@ -127,12 +151,12 @@ services:
           - TZ=Europe/Amsterdam
           - UMASK_SET=022
         volumes:
-          - /appdata/sonarr:/config
-          - /media/tv:/tv
-          - /downloads/completed:/downloads
+          - /mnt/appdata/sonarr:/config
+          - /mnt/media/tv:/tv
+          - /mnt/downloads/completed:/downloads
         network_mode: container:gluetun
         restart: unless-stopped
-	transmission:
+    transmission:
         image: ghcr.io/linuxserver/transmission
         container_name: transmission
         environment:
@@ -140,9 +164,9 @@ services:
           - PGID=100
           - TZ=Europe/Amsterdam
         volumes:
-          - /appdata/transmission:/config
-          - /downloads/completed:/downloads
-          - /downloads/watch:/watch
+          - /mnt/appdata/transmission:/config
+          - /mnt/downloads/completed:/downloads
+          - /mnt/downloads/watch:/watch
         network_mode: container:gluetun
         restart: unless-stopped
 ```
@@ -166,9 +190,9 @@ services:
       - VERSION=docker
       - UMASK_SET=022
     volumes:
-      - /appdata/plex:/config
-      - /media/tv/:/tv
-      - /media/movies/:/movies
+      - /mnt/appdata/plex:/config
+      - /mnt/media/tv/:/tv
+      - /mnt/media/movies/:/movies
     restart: unless-stopped
 ```
 
@@ -189,7 +213,7 @@ services:
       - PGID=100
       - TZ=Europe/Amsterdam
     volumes:
-      - /appdata/heimdall/:/config
+      - /mnt/appdata/heimdall/:/config
     ports:
       - 5000:80
       - 443:443
