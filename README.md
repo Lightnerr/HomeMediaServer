@@ -28,10 +28,14 @@ Ubuntuserver: https://ubuntu.com/download/server
 
 ## 2 Install SSH
 In Ubuntu, install SSH server  
-run sudo apt-get install openssh-server  
+```shell
+sudo apt-get install openssh-server  
+```
 
 Check what your IP address is by running:  
-run ifconfig  
+```shell
+ifconfig
+```  
 The guest's IP address is the "inet addr" of "eth0". This is the IP that will be used to establish the SSH connection.  
 
 ## 3. Install Docker
@@ -39,16 +43,23 @@ https://docs.docker.com/engine/install/ubuntu/
 https://docs.docker.com/compose/install/  
 
 ## 4. Install Portainer Server Deployment
+```shell
 cd ~/  
 docker volume create portainer_data  
 docker run -d -p 8000:8000 -p 9000:9000 --name=portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer  
+```
 go to http://<your internal ip>:9000
 
 ## 5. Mount external drive
-Find your drive  
+Find your drive 
+```
+shell
+``` 
 fdisk -l  
 example:  
+```shell 
 mount -t ntfs /dev/sda1  /mnt/
+```
 
 ## 6. Install vpn container
 https://hub.docker.com/r/qmcgaw/gluetun  
