@@ -52,10 +52,9 @@ go to http://<your internal ip>:9000
 
 ## 5. Mount external drive
 Find your drive 
-```
-shell
-``` 
+```shell
 fdisk -l  
+``` 
 example:  
 ```shell 
 mount -t ntfs /dev/sda1  /mnt/
