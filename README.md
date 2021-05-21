@@ -171,6 +171,11 @@ services:
         restart: unless-stopped
 ```
 
+check if you vpn container works. Go to the exec console, located at portainer on the constainers page on column quick actions.  
+Click the exec console for example radarr and click connect.  Type "curl ifconfig.io" this is your vpn ip adress. If this ip is different than the one on https://www.ipchicken.com/
+you're good.  If the curl ifconfig.io command gives you an error the vpn container is not working.  
+Check the credentials and resart the containers in the following order. gluetun first and than sonarr radarr jackett and transmission
+
 ## 8. Install plex stack
 1. Go to portainer and click stacks
 2. Click add stack
@@ -196,7 +201,7 @@ services:
     restart: unless-stopped
 ```
 
-## 8. Install plex stack
+## 9. Install heimdall
 1. Go to portainer and click stacks
 2. Click add stack
 3. Name it tools
